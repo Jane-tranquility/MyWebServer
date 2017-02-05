@@ -40,18 +40,37 @@ class Worker extends Thread{
 			String fileType;                      
 			if (name!=null&&!name.isEmpty()&&name.startsWith("GET")){
 				nameList=name.split(" ");
-				System.out.println(nameList[1]);
-				fileName=nameList[1].substring(1);
-					
-				if (fileName.endsWith(".html")){
+				//fileName=nameList[1].substring(1);
+				//System.out.println(fileName);	
+
+				if (nameList[1].equals("/")){
 					fileType="text/html";
-				}else{
-					fileType="text/plain";
-				}
-				name=in.readLine(); 
-				if (name!=null&&!name.isEmpty()&&name.startsWith("Host:")){
-					nameList=name.split(" ");
-					serverName=nameList[1].split(":")[0];
+					out.print("HTTP/1.1 200 OK\r\n" +"Content-Type: " +fileType +"\r\n"+"Content-Length: " +"2000"+"\r\n"+"Date: " + new Date() + "\r\n\r\n" );
+					out.print("<html><head>\r\n</head>\r\n<body>\r\n");
+					out.print("<h1>Index of my directory</h1>\r\n");
+					//System.out.println("this is a test");
+					File dir=new File("./");
+					File[] listOfFiles=dir.listFiles();
+					for ( int i = 0 ; i < listOfFiles.length ; i ++ ) {
+						String linkName;
+						linkName=listOfFiles[i].getPath();
+      					if ( listOfFiles[i].isDirectory ( ) ) {
+							out.print ( "<a href= "+linkName+">"+listOfFiles[i].getPath().substring(2)+"</a><br>\r\n") ;
+      					}else if ( listOfFiles[i].isFile ( ) )
+							out.print (  "<a href="+linkName+">"+listOfFiles[i].getPath().substring(2)+"</a><br>\r\n") ;
+   						}
+					}
+				else{
+					fileName=nameList[1].substring(1);
+					if (fileName.endsWith(".html")){
+						fileType="text/html";
+					}else{
+						fileType="text/plain";
+					}
+				//name=in.readLine(); 
+				//if (name!=null&&!name.isEmpty()&&name.startsWith("Host:")){
+					//nameList=name.split(" ");
+					//serverName=nameList[1].split(":")[0];
 					//System.out.println(serverName);
 					try{
 						File f=new File(fileName);
@@ -61,14 +80,16 @@ class Worker extends Thread{
 						try {
             				byte[] buffer = new byte[1000];
             				while (file.available()>0) 
-               					 out.write(buffer, 0, file.read(buffer));
+               					out.write(buffer, 0, file.read(buffer));
         				} catch (IOException e) { System.out.println(e); }
 					}catch(FileNotFoundException e){
 						out.println("File not found error!");
 					}
-				}else{
-					out.println("Bad request, the browser sent a request this web server doesn't understand!");
 				}
+				
+				//}else{
+					//out.println("Bad request, the browser sent a request this web server doesn't understand!");
+				//}
 				
 			}else{
 				out.println("Bad request, the browser sent a request this web server doesn't understand!");
