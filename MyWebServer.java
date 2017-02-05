@@ -62,6 +62,7 @@ class Worker extends Thread{
 							out.print (  "<a href="+linkName+">"+listOfFiles[i].getPath().substring(2)+"</a><br>\r\n") ;
    						}
 					}
+					out.print("</body></html>");
 				}else if(addr.endsWith("/")){
 					addr=addr.substring(1);
 					fileType="text/html";
@@ -82,8 +83,9 @@ class Worker extends Thread{
 							out.print (  "<a href="+linkName+">"+listOfFiles[i].getPath().substring(len)+"</a><br>\r\n") ;
    						}
 					}
+					out.print("</body></html>");
 
-				}else{
+				}else if (addr.endsWith("txt")||addr.endsWith("html")){
 					fileName=addr.substring(1);
 					if (fileName.endsWith(".html")){
 						fileType="text/html";
@@ -101,9 +103,21 @@ class Worker extends Thread{
             				while (file.available()>0) 
                					out.write(buffer, 0, file.read(buffer));
         				} catch (IOException e) { System.out.println(e); }
+        				out.print("</body></html>");
 					}catch(FileNotFoundException e){
 						out.println("File not found error!");
 					}
+				}else{
+					String[] parameters=addr.split("\\?")[1].split("&");
+					String person=parameters[0].split("=")[1];
+					int num1=Integer.parseInt(parameters[1].split("=")[1]);
+					int num2=Integer.parseInt(parameters[2].split("=")[1]);
+					int sum=num1+num2;
+					fileType="text/html";
+					out.print("HTTP/1.1 200 OK\r\n" +"Content-Type: " +fileType +"\r\n"+"Content-Length: " +"100"+"\r\n"+"Date: " + new Date() + "\r\n\r\n" );
+					out.print("<html><head>\r\n</head>\r\n<body>\r\n");
+					out.print("<h1>Dear "+person+", the sum of "+num1+" and "+ num2+ " is "+sum+". </h1><br>\r\n");
+					out.print("</body></html>");
 				}
 				
 			}else{
