@@ -42,8 +42,8 @@ class Worker extends Thread{
 				nameList=name.split(" ");
 				//fileName=nameList[1].substring(1);
 				//System.out.println(fileName);	
-
-				if (nameList[1].equals("/")){
+				String addr=nameList[1];
+				if (addr.equals("/")){
 					fileType="text/html";
 					out.print("HTTP/1.1 200 OK\r\n" +"Content-Type: " +fileType +"\r\n"+"Content-Length: " +"2000"+"\r\n"+"Date: " + new Date() + "\r\n\r\n" );
 					out.print("<html><head>\r\n</head>\r\n<body>\r\n");
@@ -53,25 +53,44 @@ class Worker extends Thread{
 					File[] listOfFiles=dir.listFiles();
 					for ( int i = 0 ; i < listOfFiles.length ; i ++ ) {
 						String linkName;
-						linkName=listOfFiles[i].getPath();
+						
       					if ( listOfFiles[i].isDirectory ( ) ) {
+      						linkName=listOfFiles[i].getPath()+"/";
 							out.print ( "<a href= "+linkName+">"+listOfFiles[i].getPath().substring(2)+"</a><br>\r\n") ;
-      					}else if ( listOfFiles[i].isFile ( ) )
+      					}else if ( listOfFiles[i].isFile ( ) ){
+      						linkName=listOfFiles[i].getPath();
 							out.print (  "<a href="+linkName+">"+listOfFiles[i].getPath().substring(2)+"</a><br>\r\n") ;
    						}
 					}
-				else{
-					fileName=nameList[1].substring(1);
+				}else if(addr.endsWith("/")){
+					addr=addr.substring(1);
+					fileType="text/html";
+					out.print("HTTP/1.1 200 OK\r\n" +"Content-Type: " +fileType +"\r\n"+"Content-Length: " +"2000"+"\r\n"+"Date: " + new Date() + "\r\n\r\n" );
+					out.print("<html><head>\r\n</head>\r\n<body>\r\n");
+					File dir=new File(addr);
+					int len=addr.length();
+					out.print("<h1>Index of my "+addr+" directory</h1>\r\n");
+					File[] listOfFiles=dir.listFiles();
+					for ( int i = 0 ; i < listOfFiles.length ; i ++ ) {
+						String linkName;
+						
+      					if ( listOfFiles[i].isDirectory ( ) ) {
+      						linkName=listOfFiles[i].getPath().substring(len)+"/";
+							out.print ( "<a href= "+linkName+">"+listOfFiles[i].getPath().substring(len)+"</a><br>\r\n") ;
+      					}else if ( listOfFiles[i].isFile ( ) ){
+      						linkName=listOfFiles[i].getPath().substring(len);
+							out.print (  "<a href="+linkName+">"+listOfFiles[i].getPath().substring(len)+"</a><br>\r\n") ;
+   						}
+					}
+
+				}else{
+					fileName=addr.substring(1);
 					if (fileName.endsWith(".html")){
 						fileType="text/html";
 					}else{
 						fileType="text/plain";
 					}
-				//name=in.readLine(); 
-				//if (name!=null&&!name.isEmpty()&&name.startsWith("Host:")){
-					//nameList=name.split(" ");
-					//serverName=nameList[1].split(":")[0];
-					//System.out.println(serverName);
+				
 					try{
 						File f=new File(fileName);
 						InputStream file=new FileInputStream(f);
@@ -86,10 +105,6 @@ class Worker extends Thread{
 						out.println("File not found error!");
 					}
 				}
-				
-				//}else{
-					//out.println("Bad request, the browser sent a request this web server doesn't understand!");
-				//}
 				
 			}else{
 				out.println("Bad request, the browser sent a request this web server doesn't understand!");
