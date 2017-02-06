@@ -1,0 +1,68 @@
+1) http:localhost:2540/dog.txt
+
+The file dog.txt has been returned:
+
+This is Elliott's dog file on condor. Good job!
+
+
+2) http://localhost:2540/lion.html
+
+The lion.html file has been returned:
+
+This is Elliott's
+LION
+html file
+
+
+3) http://localhost:2540/sub-a/sub-b/lion.html
+
+The lion.html file which is in directory ./a/b has been returned:
+
+This is Elliott's
+LION
+html file
+
+
+4)http:localhost:2540 AND http:localhost:2540/
+
+a dynamic html page has shown on browser with hot link references:
+
+Index of my directory
+.DS_Store
+.git
+.gitignore
+addnums.html
+dog.txt
+http-streams.txt
+lion.html
+MyWebServer-Checklist.html
+MyWebServer.class
+MyWebServer.java
+serverlog.txt
+sub-a
+Worker.class
+
+
+5)http://localhost:2540/sub-a/
+
+a dynamic html page has shown on browser with hot link references:
+
+Index of my sub-a/ directory
+.DS_Store
+sub-b
+
+
+6) http://localhost:2540/sub-a/sub-b/
+
+a dynamic html page has shown on browser with hot link references:
+
+Index of my sub-a/sub-b/ directory
+lion.html
+
+
+7)http://localhost:2540/addnums.html
+
+I entered my name and two numbers to be Jane, 34 and 65. After I submitted it, it returned to me a html file with the following content:
+
+Dear Jane, the sum of 34 and 65 is 99. 
+

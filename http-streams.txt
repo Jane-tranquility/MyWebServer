@@ -1,4 +1,4 @@
- 1)From MyListener:
+1)From MyListener:
 
 LiJings-MacBook-Pro:MyWebServer lijing$ java MyListener
 Jing Li's server starts to listen at port 2540.
@@ -67,7 +67,8 @@ Content-Type: text/html; charset=iso-8859-1
 </p>
 </body></html>
 
-//The message sent back from the web server is not what I expected, I checked the HTTP stream which I put into the console window, it should be the right one. So I tried to use the firefox network to get the response headers, and it gave me the correct and reasonable message which is as followed:
+//MyTelnet has some problems when trying to connect with the condor server. The message sent back from the web server is not what I expected, I checked the HTTP stream which I put into the console window, it should be the right one. 
+//So I tried to use the firefox network to get the response headers, and it gave me the correct and reasonable message which is as followed:
 
 HTTP/1.1 200 OK
 Accept-Ranges:"bytes"
